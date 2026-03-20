@@ -1,0 +1,103 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Stores user profile information and roles.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "user"] }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Movie": {
+      "title": "Movie",
+      "description": "Movie details for the catalog.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "posterUrl": { "type": "string", "format": "uri" },
+        "price": { "type": "number" },
+        "genre": { "type": "string" },
+        "duration": { "type": "string" },
+        "category": { "type": "string", "enum": ["Now Showing", "New Releases", "Upcoming"] },
+        "releaseDate": { "type": "string", "description": "Required for Upcoming movies" }
+      },
+      "required": ["title", "price", "category"]
+    },
+    "Showtime": {
+      "title": "Showtime",
+      "description": "Specific showtime for a movie with seat tracking.",
+      "type": "object",
+      "properties": {
+        "movieId": { "type": "string" },
+        "time": { "type": "string" },
+        "date": { "type": "string" },
+        "bookedSeats": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["movieId", "time", "date"]
+    },
+    "Snack": {
+      "title": "Snack",
+      "description": "Snack menu item.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "category": { "type": "string" },
+        "imageUrl": { "type": "string", "format": "uri" }
+      },
+      "required": ["name", "price"]
+    },
+    "Booking": {
+      "title": "Booking",
+      "description": "A completed ticket and snack booking.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "movieTitle": { "type": "string" },
+        "showtime": { "type": "string" },
+        "seats": { "type": "array", "items": { "type": "string" } },
+        "snacks": { 
+          "type": "array", 
+          "items": { 
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "quantity": { "type": "number" },
+              "price": { "type": "number" }
+            }
+          }
+        },
+        "totalAmount": { "type": "number" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "movieTitle", "totalAmount", "timestamp"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "User review and rating for a movie.",
+      "type": "object",
+      "properties": {
+        "movieId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "rating": { "type": "number", "minimum": 1, "maximum": 5 },
+        "comment": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["movieId", "userId", "userName", "rating", "timestamp"]
+    }
+  },
+  "firestore": {
+    "users": { "schema": "User", "description": "User profiles" },
+    "movies": { "schema": "Movie", "description": "Movie catalog" },
+    "showtimes": { "schema": "Showtime", "description": "Showtimes and seat availability" },
+    "snacks": { "schema": "Snack", "description": "Snack menu" },
+    "bookings": { "schema": "Booking", "description": "User booking records" },
+    "reviews": { "schema": "Review", "description": "Movie reviews and ratings" }
+  }
+}
